@@ -1,4 +1,17 @@
 const { default: config } = require("../config/config");
+export function onEditTodo({id,completed}) {
+        return fetch(`${config.BASE_URL}/${id}`, {
+            method: 'PATCH', 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({completed}),
+          }).then((success)=>{
+            return success;
+          }).catch((error)=>{
+            return error;
+          })
+    }
 
 export function getAllTodos() {
     return fetch(config.BASE_URL)
@@ -14,7 +27,7 @@ return success.json()
 }
 export function addTodo({title,order,completed=false}) {
     return fetch(config.BASE_URL, {
-        method: 'POST', // or 'PUT'
+        method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
         },
@@ -27,23 +40,10 @@ export function addTodo({title,order,completed=false}) {
 }
 export function deleteTodo(id) {
     return fetch(`${config.BASE_URL}/${id}`, {
-        method: 'DELETE', // or 'PUT'
+        method: 'DELETE', 
         headers: {
           'Content-Type': 'application/json',
         },
-      }).then((success)=>{
-        return success;
-      }).catch((error)=>{
-        return error;
-      })
-}
-export function onEditTodo({id,completed}) {
-    return fetch(`${config.BASE_URL}/${id}`, {
-        method: 'DELETE', // or 'PUT'
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({completed}),
       }).then((success)=>{
         return success;
       }).catch((error)=>{
