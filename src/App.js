@@ -21,6 +21,25 @@ function App() {
     })
   },[])
   
+
+  const onAddTodo =()=>{
+   if
+   (todo !== '' && order !== ''){
+     addTodo({title:todo,order})
+     .then((success)=>{
+       setAllData((prev)=>[...prev,{title:todo,order,completed:false}].sort(function(a, b){return a.order-b.order}))
+
+       setError(false)
+       setTodo('');
+       setOrder('')
+      }).catch((error)=>{
+        debugger;
+      })
+    }else{
+      setError(true)
+    }
+  }
+
   return (
     <div>
       <div class="jumbotron">
@@ -35,6 +54,7 @@ function App() {
   <input value={order} onChange={(e)=>setOrder(e.target.value)} placeholder='Enter Order' type="text" class="form-control" />
   <div class="input-group-append">
   <button
+   onClick={onAddTodo}
      class="btn btn-outline-secondary" type="button">Todo</button>
   <br />
   </div>
