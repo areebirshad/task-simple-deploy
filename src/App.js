@@ -8,7 +8,7 @@ import Spinner from './component/Spinner';
 function App() {
   const [allData,setAllData] = useState([]) ;
   const [isError,setError]=useState(false);
-  const [isLoading,setIsLoading]  =  useState(true);
+  const [isLoading,setIsLoading]=useState(true);
   const [todo,setTodo]=useState('');
   const [order,setOrder]=useState('');
   useEffect(()=>{
@@ -20,11 +20,18 @@ function App() {
       setIsLoading(false)
     })
   },[])
-  
-
+  const onDeleteTodo =(id)=>{
+    deleteTodo(id)
+    .then((success)=>{
+      let getFilteredList = allData.filter((item)=> item.id !== id);
+      setAllData(getFilteredList);
+      debugger;
+    }).catch((error)=>{
+      debugger;
+    })
+  }
   const onAddTodo =()=>{
-   if
-   (todo !== '' && order !== ''){
+   if(todo !== '' && order !== ''){
      addTodo({title:todo,order})
      .then((success)=>{
        setAllData((prev)=>[...prev,{title:todo,order,completed:false}].sort(function(a, b){return a.order-b.order}))
@@ -39,7 +46,18 @@ function App() {
       setError(true)
     }
   }
-
+  const onEditClick=(id,completed)=>{
+    onEditTodo({id,completed})
+    .then((success)=>{
+      let getCloneData = [...allData];
+      let getTodoIndex = getCloneData.findIndex((item)=> item.id == id);
+      getCloneData[getTodoIndex]['completed']=true;
+      setAllData(getCloneData)
+      debugger
+    }).catch((error)=>{
+      debugger;
+    })
+  }
   return (
     <div>
       <div class="jumbotron">
@@ -53,9 +71,7 @@ function App() {
   <input value={todo} onChange={(e)=>setTodo(e.target.value)}  placeholder='Enter Todo' type="text" class="form-control" />
   <input value={order} onChange={(e)=>setOrder(e.target.value)} placeholder='Enter Order' type="text" class="form-control" />
   <div class="input-group-append">
-  <button
-   onClick={onAddTodo}
-     class="btn btn-outline-secondary" type="button">Todo</button>
+  <button onClick={onAddTodo}  class="btn btn-outline-secondary" type="button">Todo</button>
   <br />
   </div>
 </div>     
@@ -99,12 +115,10 @@ function App() {
           {item.completed ? 'Yes' : 'No'}
             </td>
             <td>
-          <i style={{marginRight:9}} 
-           className='fas fa-trash' ></i>
+          <i style={{marginRight:9}} onClick={()=>onDeleteTodo(item.id)} className='fas fa-trash' ></i>
 
           
-          <i 
-           className='fas fa-pen' ></i> 
+          <i onClick={()=>onEditClick(item.id,true)} className='fas fa-pen' ></i> 
             </td>
           </tr>
         ))
